@@ -1,0 +1,62 @@
+name: Deployment, linting, and testing
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+jobs:
+  testing:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        # v5.0.0 https://github.com/actions/checkout/releases/tag/v5.0.0
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8
+        with:
+          fetch-depth: 0
+      - name: Set up Node.js environment
+        # v5.0.0 https://github.com/actions/setup-node/releases/tag/v5.0.0
+        uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444
+        with:
+          node-version-file: .nvmrc
+      - name: Install dependencies
+        run: npm ci
+      - name: Run test
+        run: npm test
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        # v5.0.0 https://github.com/actions/checkout/releases/tag/v5.0.0
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8
+        with:
+          fetch-depth: 0
+      - name: Set up Node.js environment
+        # v5.0.0 https://github.com/actions/setup-node/releases/tag/v5.0.0
+        uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444
+        with:
+          node-version-file: .nvmrc
+      - name: Install dependencies
+        run: npm ci
+      - name: Run linting
+        run: npm run lint
+  build-and-deploy:
+    needs: [testing, lint]
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    steps:
+      - name: Checkout repository
+        # v5.0.0 https://github.com/actions/checkout/releases/tag/v5.0.0
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8
+        with:
+          fetch-depth: 0
+      - name: Set up Node.js environment
+        # v5.0.0 https://github.com/actions/setup-node/releases/tag/v5.0.0
+        uses: actions/setup-node@a0853c24544627f65ddf259abe73b1d18a591444
+        with:
+          node-version-file: .nvmrc
+      - name: Install dependencies
+        run: npm ci
+      - name: Build project
+        run: npm run build
