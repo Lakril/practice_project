@@ -1,0 +1,25 @@
+name: Output event details issue
+on: issues
+jobs:
+  output:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Output event details
+        run: |
+          echo "Event name: ${{ github.event_name }}"
+          echo "Event action: ${{ github.event.action }}"
+          echo "Issue number: ${{ github.event.issue.number }}"
+          echo "Issue title: ${{ github.event.issue.title }}"
+          echo "Issue body: ${{ github.event.issue.body }}"
+          echo "Issue user login: ${{ github.event.issue.user.login }}"
+          echo "Repository name: ${{ github.repository }}"
+          echo "Repository owner: ${{ github.repository_owner }}"
+          echo "Workflow name: ${{ github.workflow }}"
+          echo "Actor: ${{ github.actor }}"
+          echo "Event path: ${{ github.event_path }}"
+          echo "SHA: ${{ github.sha }}"
+          echo "Ref: ${{ github.ref }}"
+          echo "Head ref: ${{ github.head_ref }}"
+          echo "Base ref: ${{ github.base_ref }}"
+      - name: Display full event payload
+        run: cat ${{ github.event_path }}
