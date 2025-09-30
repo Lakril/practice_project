@@ -1,7 +1,7 @@
 name: Output event details issue
 on: issues
 jobs:
-  output:
+  output-info:
     runs-on: ubuntu-latest
     steps:
       - name: Output event details
